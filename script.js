@@ -1,5 +1,10 @@
 const countryCardBlock = document.getElementById("country-card-display");
 const modal = document.getElementById("modal-dialog");
+const spinner = ` <div class="spinner-border text-primary mx-auto" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+`;
+
 console.log(modal);
 function renderModal(modalData) {
   fetch();
@@ -42,10 +47,12 @@ function renderModal(modalData) {
   modal.innerHTML = modalHTML;
 }
 
+countryCardBlock.innerHTML = spinner;
+
 fetch("https://restcountries.com/v3.1/all")
   .then((res) => res.json())
   .then((data) => {
-    console.log(data);
+    countryCardBlock.innerHTML = "";
     data.forEach((country) => {
       renderCountry(country);
     });
