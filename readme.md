@@ -35,3 +35,11 @@ _Empty space is 100% width_
     button which toggles the modal should contain the below data attr.
     1. data-bs-toggle="modal" --> for closing and open modal
     2. data-bs-target="#modal" --> to target a modal which it opens when clicked
+
+## Learned out of Scope
+
+    1. Netlify functions basics.
+    2. Serverless Functions.
+    3. Proxy server concept.
+    4. Netlify CLI.
+    5. Netlify developer environment.

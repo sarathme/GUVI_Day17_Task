@@ -1,0 +1,22 @@
+{
+  "name": "day17_task_weather",
+  "version": "1.0.0",
+  "description": "Task for GUVI ",
+  "main": "script.js",
+  "scripts": {
+    "netlify": "./node_modules/.bin/netlify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarathme/GUVI_Day17_Task.git"
+  },
+  "author": "Sarasraman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarathme/GUVI_Day17_Task/issues"
+  },
+  "homepage": "https://github.com/sarathme/GUVI_Day17_Task#readme",
+  "devDependencies": {
+    "netlify-cli": "^17.33.4"
+  }
+}

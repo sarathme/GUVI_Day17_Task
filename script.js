@@ -5,46 +5,57 @@ const spinner = ` <div class="spinner-border text-primary mx-auto" role="status"
 </div>
 `;
 
-console.log(modal);
 function renderModal(modalData) {
-  fetch();
+  modal.innerHTML = spinner;
+  const [lat, lng] = modalData.latlng.split(",");
 
-  const modalHTML = `<div class="modal-content">
-          <div class="modal-header bg-primary">
-            <h5 class="modal-title">${modalData.countryName}</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body bg-subtle">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4 col-10 mx-auto"
-                  >.<img
-                    class="mx-md-auto"
-                    src="https://openweathermap.org/img/wn/10d@2x.png"
-                    alt="Icon of Rain"
-                /></div>
-              </div>
-              <div class="row">
-                <div class="col-6 mx-auto modal-title fs-2">Light Rain</div>
-              </div>
-            </div>
-          </div>
+  fetch(`/.netlify/functions/fetch-weather?lat=${lat}&lng=${lng}`)
+    .then((res) => res.json())
+    .then((data) => {
+      let time;
+      data.weather[0].icon.includes("n") ? (time = "Night") : (time = "Day");
+      const modalHTML = `
+    <div class="modal-header bg-primary">
+      <h5 class="modal-title">${
+        modalData.countryName
+      } <span class="badge bg-time rounded-pill">${time}</span></h5>
 
-          <div class="modal-footer bg-secondary">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-dismiss="modal"
-              >Close</button
-            >
-          </div>
-        </div>`;
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"></button>
+    </div>
+    <div class="modal-body bg-subtle w-100">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-4 col-10 mx-auto"
+            >.<img
+              class="mx-md-auto"
+              src=${`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
+              alt="Icon of Rain"
+          /></div>
+        </div>
+        <div class="row">
+          <div class="col-6 mx-auto modal-title fs-2">${
+            data.weather[0].description
+          }</div>
+        </div>
+      </div>
+    </div>
 
-  modal.innerHTML = modalHTML;
+    <div class="modal-footer bg-secondary w-100">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-dismiss="modal"
+        >Close</button
+      >
+    </div>
+  `;
+
+      modal.innerHTML = modalHTML;
+    });
 }
 
 countryCardBlock.innerHTML = spinner;
@@ -53,6 +64,7 @@ fetch("https://restcountries.com/v3.1/all")
   .then((res) => res.json())
   .then((data) => {
     countryCardBlock.innerHTML = "";
+
     data.forEach((country) => {
       renderCountry(country);
     });
@@ -70,7 +82,9 @@ fetch("https://restcountries.com/v3.1/all")
 function renderCountry(country) {
   const cardHTML = `<div class="col-12 col-sm-10 col-lg-4 col-md-6 mb-4 mx-sm-auto" style="height:500px ">
           <div class="card h-100" >
-            <h5 class="card-header text-center bg-primary p-4" style="max-height:6.5rem;min-height:6.5rem">${country.name.common}</h5>
+            <h5 class="card-header text-center bg-primary p-4" style="max-height:6.5rem;min-height:6.5rem">${
+              country.name.common
+            }</h5>
             <div class="p-1 border border-2 border-secondary" style="min-height:12rem; max-height:12rem">
               <img
               src="${country.flags.png}"
@@ -110,10 +124,15 @@ function renderCountry(country) {
                 ></div
               >
               <a  type="button" class="btn btn-primary mx-auto w-100" data-bs-toggle="modal" data-bs-target="#modal"
-               data-lat="${country.latlng[0]}" data-lng="${country.latlng[1]}" data-country-name="${country.name.common}" >Weather Details</a
+               data-country-code="${country.cca2}" data-country-name="${
+    country.name.common
+  }" data-capital="${country.capital?.[0]}" data-latlng="${country.latlng.join(
+    ","
+  )}" >Weather Details</a
               >
             </div>
           </div>
         </div>`;
+
   countryCardBlock.insertAdjacentHTML("beforeend", cardHTML);
 }
